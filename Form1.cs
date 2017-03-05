@@ -338,32 +338,6 @@ namespace asgn5v1
 
             if (gooddata)
             {
-                //create the screen coordinates:
-                // scrnpts = vertices*ctrans
-                //System.Drawing.Rectangle workingRectangle = Screen.PrimaryScreen.WorkingArea;
-                //int width = workingRectangle.Width;
-                //int height = workingRectangle.Height;
-                //ctrans[0, 0] = 1;
-                //ctrans[0, 1] = 0;
-                //ctrans[0, 2] = 0;
-                //ctrans[0, 3] = 0;
-
-                //ctrans[1, 0] = 0;
-                //ctrans[1, 1] = -1;
-                //ctrans[1, 2] = 0;
-                //ctrans[1, 3] = 0;
-
-                //ctrans[2, 0] = 0;
-                //ctrans[2, 1] = 0;
-                //ctrans[2, 2] = 1;
-                //ctrans[2, 3] = 0;
-
-                //ctrans[3, 0] = width / 2;
-                //ctrans[3, 1] = height / 2;
-                //ctrans[3, 2] = 0;
-                //ctrans[3, 3] = 1;
-
-
                 for (int i = 0; i < numpts; i++)
                 {
                     for (int j = 0; j < 4; j++)
@@ -437,7 +411,7 @@ namespace asgn5v1
             // build tNet
             tNet = multiplyMatrix(leftMatrix, rightMatrix);
             // scale
-            rightMatrix = scale(scaleFactor, scaleFactor, 0);
+            rightMatrix = scale(scaleFactor, scaleFactor, scaleFactor);
             // build tNet
             tNet = multiplyMatrix(tNet, rightMatrix);
             // transport to middle of screen 
@@ -446,7 +420,6 @@ namespace asgn5v1
             tNet = multiplyMatrix(tNet, rightMatrix);
             // assign tNet to main transformation matrix
             ctrans = tNet;
-
         }
         //.....................................................................
         // translates an image
@@ -490,7 +463,7 @@ namespace asgn5v1
             return reflectMatrix;
         }
         //.....................................................................
-        // Scales an image
+        // scales an image
         double[,] scale(double xFactor, double yFactor, double zFactor)
         {
             double[,] scaleMatrix = new Double[4, 4];
@@ -625,31 +598,53 @@ bool GetNewData()
 
 		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
 		{
+            // + - 75 on x 
+            // + - 3 on y
 			if (e.Button == transleftbtn)
 			{
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = translate(-75, 0, 0);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
 				Refresh();
 			}
 			if (e.Button == transrightbtn) 
 			{
-				Refresh();
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = translate(75, 0, 0);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
 			}
 			if (e.Button == transupbtn)
 			{
-				Refresh();
-			}
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = translate(0, -35, 0);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
+            }
 			
 			if(e.Button == transdownbtn)
 			{
-				Refresh();
-			}
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = translate(0, 35, 0);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
+            }
 			if (e.Button == scaleupbtn) 
 			{
-				Refresh();
+                Debug.WriteLine("== Scaling by 10% ==");
+                ctrans = multiplyMatrix(ctrans, translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]));
+                ctrans = multiplyMatrix(ctrans, scale(1.1, 1.1, 1.1));
+                ctrans = multiplyMatrix(ctrans,translate (scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]));
+                Refresh();
 			}
 			if (e.Button == scaledownbtn) 
 			{
-				Refresh();
-			}
+                Debug.WriteLine("== Scaling by -10% ==");
+                ctrans = multiplyMatrix(ctrans, translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]));
+                ctrans = multiplyMatrix(ctrans, scale(0.9,0.9,0.9));
+                ctrans = multiplyMatrix(ctrans, translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]));
+                Refresh();
+            }
 			if (e.Button == rotxby1btn) 
 			{
 				
