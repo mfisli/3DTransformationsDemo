@@ -494,6 +494,42 @@ namespace asgn5v1
             }
             return result;
         }
+        //.....................................................................
+        // rotates matrix
+        double[,] rotateBy(string axis)
+        {
+            Debug.WriteLine("rotating Matrix");
+            double[,] rotationMatrix = new Double[4, 4];
+            setIdentity(rotationMatrix, 4, 4);
+
+            double cos = Math.Cos(0.05);
+            double sin = Math.Sin(0.05);
+
+            switch(axis)
+            {
+                case "x":
+                    rotationMatrix[1, 1] = cos;
+                    rotationMatrix[1, 2] = sin;
+                    rotationMatrix[2, 1] = -sin;
+                    rotationMatrix[2, 2] = cos;
+                    break;
+                case "y":
+                    rotationMatrix[0, 0] = cos;
+                    rotationMatrix[0, 2] = -sin;
+                    rotationMatrix[2, 0] = sin;
+                    rotationMatrix[2, 2] = cos;
+                    break;
+                case "z":
+                    rotationMatrix[0, 0] = cos;
+                    rotationMatrix[0, 1] = sin;
+                    rotationMatrix[1, 0] = -sin;
+                    rotationMatrix[1, 1] = cos;
+                    break;
+
+            }
+            return rotationMatrix;
+
+        }
 
 
 bool GetNewData()
@@ -632,31 +668,81 @@ bool GetNewData()
 			if (e.Button == scaleupbtn) 
 			{
                 Debug.WriteLine("== Scaling by 10% ==");
-                ctrans = multiplyMatrix(ctrans, translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]));
-                ctrans = multiplyMatrix(ctrans, scale(1.1, 1.1, 1.1));
-                ctrans = multiplyMatrix(ctrans,translate (scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]));
+                double[,] rightMatrix = new Double[4, 4];
+
+                rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = scale(1.1, 1.1, 1.1);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
                 Refresh();
 			}
 			if (e.Button == scaledownbtn) 
 			{
                 Debug.WriteLine("== Scaling by -10% ==");
-                ctrans = multiplyMatrix(ctrans, translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]));
-                ctrans = multiplyMatrix(ctrans, scale(0.9,0.9,0.9));
-                ctrans = multiplyMatrix(ctrans, translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]));
+                double[,] rightMatrix = new Double[4, 4];
+
+                rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = scale(0.9, 0.9, 0.9);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
                 Refresh();
             }
 			if (e.Button == rotxby1btn) 
 			{
-				
-			}
+                Debug.WriteLine("== Rotating by x ==");
+                double[,] rightMatrix = new Double[4, 4];
+
+                rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = rotateBy("x");
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
+
+            }
 			if (e.Button == rotyby1btn) 
 			{
-				
-			}
+                Debug.WriteLine("== Rotating by x ==");
+                double[,] rightMatrix = new Double[4, 4];
+
+                rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = rotateBy("y");
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
+
+            }
 			if (e.Button == rotzby1btn) 
 			{
-				
-			}
+                Debug.WriteLine("== Rotating by x ==");
+                double[,] rightMatrix = new Double[4, 4];
+
+                rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = rotateBy("z");
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                Refresh();
+
+            }
 
 			if (e.Button == rotxbtn) 
 			{
