@@ -26,6 +26,7 @@ namespace asgn5v1
 		double[,] vertices;
 		double[,] scrnpts;
 		double[,] ctrans = new double[4,4];  //your main transformation matrix
+        bool isRotating = false; // used as a flag for continuous roation 
 		private System.Windows.Forms.ImageList tbimages;
 		private System.Windows.Forms.ToolBar toolBar1;
 		private System.Windows.Forms.ToolBarButton transleftbtn;
@@ -638,6 +639,7 @@ bool GetNewData()
             // + - 3 on y
 			if (e.Button == transleftbtn)
 			{
+                isRotating = false;
                 double[,] rightMatrix = new Double[4, 4];
                 rightMatrix = translate(-75, 0, 0);
                 ctrans = multiplyMatrix(ctrans, rightMatrix);
@@ -645,6 +647,7 @@ bool GetNewData()
 			}
 			if (e.Button == transrightbtn) 
 			{
+                isRotating = false;
                 double[,] rightMatrix = new Double[4, 4];
                 rightMatrix = translate(75, 0, 0);
                 ctrans = multiplyMatrix(ctrans, rightMatrix);
@@ -652,6 +655,7 @@ bool GetNewData()
 			}
 			if (e.Button == transupbtn)
 			{
+                isRotating = false;
                 double[,] rightMatrix = new Double[4, 4];
                 rightMatrix = translate(0, -35, 0);
                 ctrans = multiplyMatrix(ctrans, rightMatrix);
@@ -660,6 +664,7 @@ bool GetNewData()
 			
 			if(e.Button == transdownbtn)
 			{
+                isRotating = false;
                 double[,] rightMatrix = new Double[4, 4];
                 rightMatrix = translate(0, 35, 0);
                 ctrans = multiplyMatrix(ctrans, rightMatrix);
@@ -667,6 +672,7 @@ bool GetNewData()
             }
 			if (e.Button == scaleupbtn) 
 			{
+                isRotating = false;
                 Debug.WriteLine("== Scaling by 10% ==");
                 double[,] rightMatrix = new Double[4, 4];
 
@@ -682,6 +688,7 @@ bool GetNewData()
 			}
 			if (e.Button == scaledownbtn) 
 			{
+                isRotating = false;
                 Debug.WriteLine("== Scaling by -10% ==");
                 double[,] rightMatrix = new Double[4, 4];
 
@@ -697,6 +704,7 @@ bool GetNewData()
             }
 			if (e.Button == rotxby1btn) 
 			{
+                isRotating = false;
                 Debug.WriteLine("== Rotating by x ==");
                 double[,] rightMatrix = new Double[4, 4];
 
@@ -713,6 +721,7 @@ bool GetNewData()
             }
 			if (e.Button == rotyby1btn) 
 			{
+                isRotating = false;
                 Debug.WriteLine("== Rotating by x ==");
                 double[,] rightMatrix = new Double[4, 4];
 
@@ -729,6 +738,7 @@ bool GetNewData()
             }
 			if (e.Button == rotzby1btn) 
 			{
+                isRotating = false;
                 Debug.WriteLine("== Rotating by x ==");
                 double[,] rightMatrix = new Double[4, 4];
 
@@ -746,19 +756,69 @@ bool GetNewData()
 
 			if (e.Button == rotxbtn) 
 			{
-				
-			}
+                isRotating = true;
+                Debug.WriteLine("== Starting x rotation ==");
+                double[,] rightMatrix = new Double[4, 4];
+                while (isRotating)
+                {
+                    rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                    rightMatrix = rotateBy("x");
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                    rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+                    Refresh();
+                    System.Threading.Thread.Sleep(150);
+                    Application.DoEvents();
+                }
+
+            }
 			if (e.Button == rotybtn) 
 			{
-				
-			}
-			
-			if (e.Button == rotzbtn) 
-			{
-				
-			}
+                isRotating = true;
+                Debug.WriteLine("== Starting y rotation ==");
+                double[,] rightMatrix = new Double[4, 4];
+                while (isRotating)
+                {
+                    rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
 
-			if(e.Button == shearleftbtn)
+                    rightMatrix = rotateBy("y");
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                    rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+                    Refresh();
+                    System.Threading.Thread.Sleep(150);
+                    Application.DoEvents();
+                }
+
+            }
+
+            if (e.Button == rotzbtn) 
+			{
+                isRotating = true;
+                Debug.WriteLine("== Starting z rotation ==");
+                double[,] rightMatrix = new Double[4, 4];
+                while (isRotating)
+                {
+                    rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                    rightMatrix = rotateBy("z");
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                    rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
+                    ctrans = multiplyMatrix(ctrans, rightMatrix);
+                    Refresh();
+                    System.Threading.Thread.Sleep(150);
+                    Application.DoEvents();
+                }
+            }
+
+            if (e.Button == shearleftbtn)
 			{
 				Refresh();
 			}
