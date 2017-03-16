@@ -531,6 +531,30 @@ namespace asgn5v1
             return rotationMatrix;
 
         }
+        //.....................................................................
+        // Horizontal Shear by factor 10% left or right 
+        // Note: (x, y) -> (x + y*shearFactor, y)
+        // Modification will occur at row 2, column 1; [1,0] 
+        double[,] shear(string direction)
+        {
+            double[,] shearMatrix = new Double[4, 4];
+            setIdentity(shearMatrix, 4, 4);
+            switch(direction)
+            {
+                case "right":
+                    Debug.WriteLine("Shearing right");
+                    shearMatrix[1, 0] = -0.1; // why is this not +10%?
+                    break;
+                case "left":
+                    Debug.WriteLine("Shearing left");
+                    shearMatrix[1, 0] = +0.1; // why is this not -10%?
+                    break;
+                default:
+                    Debug.WriteLine("Unexpected Shear Direction Given");
+                    break;
+            }
+            return shearMatrix;
+        }
 
 
 bool GetNewData()
@@ -820,17 +844,35 @@ bool GetNewData()
 
             if (e.Button == shearleftbtn)
 			{
+                isRotating = false;
+                Debug.WriteLine("== Shear Left ==");
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = shear("left");
+                double temp = ctrans[3, 1]; // bottom row Y value 
+                ctrans[3, 1] = 0.0;
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                ctrans[3, 1] = temp; 
+
 				Refresh();
 			}
 
 			if (e.Button == shearrightbtn) 
 			{
-				Refresh();
+                isRotating = false;
+                Debug.WriteLine("== Shear Left ==");
+                double[,] rightMatrix = new Double[4, 4];
+                rightMatrix = shear("right");
+                double temp = ctrans[3, 1]; // bottom row Y value 
+                ctrans[3, 1] = 0.0;
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                ctrans[3, 1] = temp;
+                Refresh();
 			}
 
 			if (e.Button == resetbtn)
 			{
-				RestoreInitialImage();
+                isRotating = false;
+                RestoreInitialImage();
 			}
 
 			if(e.Button == exitbtn) 
