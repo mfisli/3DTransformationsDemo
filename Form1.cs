@@ -806,14 +806,16 @@ bool GetNewData()
                 double[,] rightMatrix = new Double[4, 4];
                 while (isRotating)
                 {
+                    // translate to origin
                     rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
-
+                    // rotate
                     rightMatrix = rotateBy("y");
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
-
+                    // translate back 
                     rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
+
                     Refresh();
                     System.Threading.Thread.Sleep(150);
                     Application.DoEvents();
@@ -828,14 +830,16 @@ bool GetNewData()
                 double[,] rightMatrix = new Double[4, 4];
                 while (isRotating)
                 {
+                    // translate to origin
                     rightMatrix = translate(-scrnpts[0, 0], -scrnpts[0, 1], -scrnpts[0, 2]);
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
-
+                    // rotate 
                     rightMatrix = rotateBy("z");
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
-
+                    // translate back 
                     rightMatrix = translate(scrnpts[0, 0], scrnpts[0, 1], scrnpts[0, 2]);
                     ctrans = multiplyMatrix(ctrans, rightMatrix);
+
                     Refresh();
                     System.Threading.Thread.Sleep(150);
                     Application.DoEvents();
@@ -846,28 +850,39 @@ bool GetNewData()
 			{
                 isRotating = false;
                 Debug.WriteLine("== Shear Left ==");
-                double[,] rightMatrix = new Double[4, 4];
-                rightMatrix = shear("left");
-                double temp = ctrans[3, 1]; // bottom row Y value 
-                ctrans[3, 1] = 0.0;
-                ctrans = multiplyMatrix(ctrans, rightMatrix);
-                ctrans[3, 1] = temp; 
 
-				Refresh();
+                double[,] rightMatrix = new Double[4, 4];
+                // translate to origin 
+                rightMatrix = translate(-scrnpts[20, 0], -scrnpts[20, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                // shear
+                rightMatrix = shear("left");
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                // translate back 
+                rightMatrix = translate(scrnpts[20, 0], scrnpts[20, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
+                Refresh();
 			}
 
 			if (e.Button == shearrightbtn) 
 			{
                 isRotating = false;
-                Debug.WriteLine("== Shear Left ==");
+                Debug.WriteLine("== Shear Right ==");
+
                 double[,] rightMatrix = new Double[4, 4];
-                rightMatrix = shear("right");
-                double temp = ctrans[3, 1]; // bottom row Y value 
-                ctrans[3, 1] = 0.0;
+                // translate to origin 
+                rightMatrix = translate(-scrnpts[20, 0], -scrnpts[20, 1], -scrnpts[0, 2]);
                 ctrans = multiplyMatrix(ctrans, rightMatrix);
-                ctrans[3, 1] = temp;
+                // shear 
+                rightMatrix = shear("right");
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+                // translate back 
+                rightMatrix = translate(scrnpts[20, 0], scrnpts[20, 1], -scrnpts[0, 2]);
+                ctrans = multiplyMatrix(ctrans, rightMatrix);
+
                 Refresh();
-			}
+            }
 
 			if (e.Button == resetbtn)
 			{
